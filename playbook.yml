@@ -1,0 +1,40 @@
+---
+
+- name: initialize openstack
+  hosts: localhost
+  tasks:
+    - name: modify OpenStack project quotas
+      shell: |
+        source /opt/spacex/scripts/openrc.sh && \
+        source /home/ubuntu/.virtualenvs/os_cli/bin/activate && \
+        openstack quota set {{openstack_tenant_name}} --cores 384 --instances 100 --volumes 100 --gigabytes 28800 --ram 485376 && \
+        neutron quota-update --tenant_id `openstack project show -f value -c id {{openstack_tenant_name}}` --port 100 
+      args:
+        executable: /bin/bash
+
+    - name: generate bosh key pair
+      shell: /opt/spacex/init-openstack/generate_ssh_keypair.sh creates=/opt/spacex/tf/bosh-init/bosh.pem
+      args:
+        chdir: /opt/spacex/tf/bosh-init
+        executable: /bin/bash
+
+    - name: run terraform for provision bosh director environment
+      shell: yes yes | terraform apply /opt/spacex/init-openstack/bosh-init
+      args:
+        chdir: /opt/spacex/tf/bosh-init
+        executable: /bin/bash
+
+    - name: run terraform for provision cf environment
+      shell: yes yes | terraform apply /opt/spacex/init-openstack/cf-init
+      args:
+        chdir: /opt/spacex/tf/cf-init
+        executable: /bin/bash
+
+- name: install wise-stack
+  hosts: localhost
+  roles:
+    - bosh
+#    - cf
+#    - db
+#    - prometheus
+#    - iothub

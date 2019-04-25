@@ -1,0 +1,22 @@
+cf_system_domain:
+
+##############################################################################
+# configure the following variables to match your environment
+openstack_domain_name: default
+openstack_user_name: admin
+openstack_password: P@ssw0rd
+openstack_tenant_name: WISE-PaaS
+openstack_region_name: RegionOne
+ext_net_name: public
+use_fuel_deploy: true
+
+dns: "[\"8.8.8.8\",\"8.8.4.4\"]"
+ntp: "[\"time1.google.com\",\"time2.google.com\",\"time3.google.com\",\"time4.google.com\"]"
+
+az1: nova
+az2: nova
+az3: nova
+
+bosh_endpoint: 10.0.0.100
+bosh_env: spacex
+##############################################################################

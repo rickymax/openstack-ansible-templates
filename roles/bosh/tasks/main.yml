@@ -1,0 +1,47 @@
+
+---
+
+- name: clone the deployment config
+  shell: /opt/spacex/scripts/multiple-git-clone.sh /opt/spacex/workspaces/deployment.list
+  args:
+    executable: /bin/bash
+
+- name: deploy bosh director
+  shell: bosh create-env /opt/spacex/workspaces/bosh-deployment/bosh.yml --state=/opt/spacex/state.json --vars-store=/opt/spacex/creds.yml -o /opt/spacex/workspaces/bosh-deployment/openstack/cpi.yml -o /opt/spacex/workspaces/bosh-deployment/uaa.yml -o /opt/spacex/workspaces/bosh-deployment/openstack/custom/add-bosh-uaa-clients.yml -o /opt/spacex/workspaces/bosh-deployment/openstack/custom/set-dns.yml -o /opt/spacex/workspaces/bosh-deployment/jumpbox-user.yml -o /opt/spacex/workspaces/bosh-deployment/credhub.yml -v director_name=wise-bosh -v internal_cidr=10.0.0.0/20 -v internal_gw=10.0.0.1 -v internal_ip=10.0.0.100 -v auth_url={{identity_endpoint}} -v az=nova -v default_key_name=bosh -v default_security_groups=[bosh,WISE-PaaS-nsg] -v net_id={{net_id_mgmt}} -v openstack_username={{openstack_user_name}} -v openstack_password={{openstack_password}} -v openstack_domain={{openstack_domain_name}} -v openstack_project={{openstack_tenant_name}} -v private_key=/opt/spacex/tf/bosh-init/bosh.pem -v region={{openstack_region_name}} -v dns={{dns}} -v ntp={{ntp}}
+  args:
+    executable: /bin/bash
+
+- name: generate bosh login command
+  shell: '{{item}}'
+  args:
+    executable: /bin/bash
+  with_items:
+    - /opt/spacex/scripts/generate-bl.sh `bosh int /opt/spacex/wise-stack-playbook/group_vars/all.yml --path /bosh_endpoint` `bosh int /opt/spacex/wise-stack-playbook/group_vars/all.yml --path /bosh_env`
+    - bl
+
+- name: enable bosh ssh access
+  shell: '{{item}}'
+  args:
+    executable: /bin/bash
+  with_items:
+    - bosh int /opt/spacex/creds.yml --path /jumpbox_ssh/private_key > /opt/spacex/jumpbox.key
+    - chmod 600 /opt/spacex/jumpbox.key
+
+- name: dump bosh ca file
+  shell: echo "`bosh int /opt/spacex/creds.yml --path /director_ssl/ca`" &> /opt/spacex/bosh_ca_cert
+
+#- name: upload bosh releases
+#  shell: /opt/spacex/scripts/upload-releases.sh
+
+#- name: upload bosh stemcells
+#  shell: /opt/spacex/scripts/upload-stemcells.sh
+
+- name: update runtime config
+  shell: bosh -e spacex update-runtime-config /opt/spacex/workspaces/bosh-deployment/runtime-configs/custom/node-exporter.yml -n
+  args:
+    executable: /bin/bash
+
+- name: update cloud config
+  shell: bosh -e spacex update-cloud-config -v availability_zone1={{az1}} -v availability_zone2={{az2}} -v availability_zone3={{az3}} -v network_mgmt={{net_id_mgmt}} -v network_cf1=`bosh int /opt/spacex/tf/terraform-vars.yml --path /net_id_cf1` -v network_cf2=`bosh int /opt/spacex/tf/terraform-vars.yml --path /net_id_cf2` -v network_cf3=`bosh int /opt/spacex/tf/terraform-vars.yml --path /net_id_cf3` -v network_rmq=`bosh int /opt/spacex/tf/terraform-vars.yml --path /net_id_rmq` -v network_db=`bosh int /opt/spacex/tf/terraform-vars.yml --path /net_id_db` -v network_public={{net_id_mgmt}} -v dns={{dns}} /opt/spacex/workspaces/cf-deployment/iaas-support/openstack/custom/cloud-config.yml -n
+  args:
+    executable: /bin/bash
