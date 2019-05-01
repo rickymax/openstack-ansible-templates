@@ -8,7 +8,7 @@
         source /opt/spacex/scripts/openrc.sh && \
         source /home/ubuntu/.virtualenvs/os_cli/bin/activate && \
         openstack quota set {{openstack_tenant_name}} --cores 384 --instances 100 --volumes 100 --gigabytes 28800 --ram 485376 && \
-        neutron quota-update --tenant_id `openstack project show -f value -c id {{openstack_tenant_name}}` --port 100 
+        neutron quota-update --tenant_id `openstack project show -f value -c id {{openstack_tenant_name}}` --port 100
       args:
         executable: /bin/bash
 
@@ -34,7 +34,7 @@
   hosts: localhost
   roles:
     - bosh
-#    - cf
+    - cf
 #    - db
 #    - prometheus
 #    - iothub

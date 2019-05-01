@@ -2,7 +2,18 @@
 ---
 
 - name: deploy cf
-  shell: bosh -e spacex -d cf deploy /opt/spacex/workspaces/cf-deployment/cf-deployment.yml --vars-store /opt/spacex/workspaces/cf-vars.yml -o /opt/spacex/workspaces/cf-deployment/operations/openstack.yml -o /opt/spacex/workspaces/cf-deployment/operations/custom/use-haproxy.yml -v system_domain={{cf_system_domain}} -v haproxy_public_ip=`bosh int /opt/spacex/tf/terraform-vars.yml --path /cf_haproxy_public_ip` -n
+  shell: |
+    bosh -e spacex -d cf -n deploy /opt/spacex/workspaces/cf-deployment/cf-deployment.yml \
+      --vars-store /opt/spacex/workspaces/cf-vars.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/openstack.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/use-haproxy.yml \
+      -v system_domain={{cf_system_domain}} \
+      -v haproxy_public_ip=`bosh int /opt/spacex/tf/terraform-vars.yml --path /cf_haproxy_public_ip` \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/add-cf-uaa-clients.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/add-cf-uaa-users.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/configure-default-asg.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/configure-maximum-app-disk.yml \
+      -o /opt/spacex/workspaces/cf-deployment/operations/custom/configure-router-ciphers.yml
   args:
     executable: /bin/bash
 
@@ -11,7 +22,7 @@
   args:
     executable: /bin/bash
   with_items:
-    - /opt/spacex/scripts/generate-cl.sh `bosh int /opt/spacex/wise-stack-playbook/group_vars/all.yml --path /cf_system_domain`
+    - /opt/spacex/scripts/generate-cl.sh `bosh int /opt/spacex/playbooks/group_vars/all.yml --path /cf_system_domain`
     - cl
 
 - name: enable cf feature flag
