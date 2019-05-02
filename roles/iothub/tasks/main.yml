@@ -1,3 +1,23 @@
 
 ---
 
+- name: check apps-iothub-production-vars exists
+  stat:
+    path: /opt/spacex/workspaces/apps-iothub-production-vars.yml
+  register: stat_result
+
+- name: copy the vars, if apps-iothub-production-vars doesnt exist already
+  copy:
+    src: /opt/spacex/workspaces/cf-vars.yml
+    dest: /opt/spacex/workspaces/apps-iothub-production-vars.yml
+  when: stat_result.stat.exists == False
+
+- name: deploy apps-iothub-production
+  shell: |
+    bosh -e spacex -d apps-iothub-production -n deploy /opt/spacex/workspaces/rabbitmq-deployments/rabbitmq-deployment.yml \
+      --vars-store /opt/spacex/workspaces/apps-iothub-production-vars.yml \
+      -v environment=apps \
+      -v rabbitmq_haproxy_public_ip=`bosh int /opt/spacex/tf/terraform-vars.yml --path /rabbitmq_haproxy_public_ip` \
+      -v domain={{cf_system_domain}}
+  args:
+    executable: /bin/bash

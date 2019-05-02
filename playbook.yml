@@ -37,4 +37,4 @@
     - cf
     - db
     - prometheus
-#    - iothub
+    - iothub
