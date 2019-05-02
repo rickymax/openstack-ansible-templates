@@ -36,5 +36,5 @@
     - bosh
     - cf
     - db
-#    - prometheus
+    - prometheus
 #    - iothub

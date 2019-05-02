@@ -54,6 +54,8 @@
 
 - name: dump bosh ca file
   shell: echo "`bosh int /opt/spacex/creds.yml --path /director_ssl/ca`" &> /opt/spacex/bosh_ca_cert
+  args:
+    executable: /bin/bash
 
 - name: upload bosh releases
   shell: /opt/spacex/scripts/upload-releases.sh
