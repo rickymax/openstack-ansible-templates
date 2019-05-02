@@ -35,6 +35,6 @@
   roles:
     - bosh
     - cf
-#    - db
+    - db
 #    - prometheus
 #    - iothub

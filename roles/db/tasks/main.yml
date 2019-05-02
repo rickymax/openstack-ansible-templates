@@ -2,26 +2,26 @@
 ---
 
 - name: deploy apps postgresql
-  shell: bosh -e spacex -d apps-postgresql-production deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-postgresql-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml -n
+  shell: bosh -e spacex -d apps-postgresql-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-postgresql-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
 
 - name: deploy ops postgresql
-  shell: bosh -e spacex -d ops-postgresql-production deploy /opt/spacex/workspaces/autoDeployManifest/production/ops-postgresql-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml -n
+  shell: bosh -e spacex -d ops-postgresql-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/ops-postgresql-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
 
 - name: deploy apps mongodb
-  shell: bosh -e spacex -d apps-mongodb-production deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-mongodb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml -n
+  shell: bosh -e spacex -d apps-mongodb-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-mongodb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
 
 - name: deploy apps influxdb
-  shell: bosh -e spacex -d apps-influxdb-production deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-influxdb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml -n
+  shell: bosh -e spacex -d apps-influxdb-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/apps-influxdb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
 
 - name: deploy ops influxdb
-  shell: bosh -e spacex -d ops-influxdb-production deploy /opt/spacex/workspaces/autoDeployManifest/production/ops-influxdb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml -n
+  shell: bosh -e spacex -d ops-influxdb-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/ops-influxdb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
