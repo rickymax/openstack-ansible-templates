@@ -1,10 +1,10 @@
 
 ---
 
-- name: clone the deployment config
-  shell: /opt/spacex/scripts/multiple-git-clone.sh /opt/spacex/workspaces/deployment.list
-  args:
-    executable: /bin/bash
+#- name: clone the deployment config
+#  shell: /opt/spacex/scripts/multiple-git-clone.sh /opt/spacex/workspaces/deployment.list
+#  args:
+#    executable: /bin/bash
 
 - name: deploy bosh director
   shell: |
