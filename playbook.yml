@@ -7,7 +7,7 @@
       shell: |
         source /opt/spacex/scripts/openrc.sh && \
         source /home/ubuntu/.virtualenvs/os_cli/bin/activate && \
-        openstack quota set {{openstack_tenant_name}} --cores 384 --instances 100 --volumes 100 --gigabytes 28800 --ram 485376 && \
+        openstack quota set {{openstack_tenant_name}} --cores {{physical_cpu_capacity}} --instances 100 --volumes 100 --gigabytes {{physical_disk_capacity}} --ram {{physical_memory_capacity}} && \
         neutron quota-update --tenant_id `openstack project show -f value -c id {{openstack_tenant_name}}` --port 100
       args:
         executable: /bin/bash

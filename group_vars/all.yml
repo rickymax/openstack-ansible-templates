@@ -19,4 +19,8 @@ az3: nova
 
 bosh_endpoint: 10.0.0.100
 bosh_env: spacex
+
+physical_cpu_capacity: 384
+physical_memory_capacity: 681984
+physical_disk_capacity: 28800
 ##############################################################################
