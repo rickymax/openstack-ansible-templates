@@ -25,3 +25,8 @@
   shell: bosh -e spacex -d ops-influxdb-production -n deploy /opt/spacex/workspaces/autoDeployManifest/production/ops-influxdb-production.yml --vars-store /opt/spacex/workspaces/autoDeployManifest/password-vars.yml
   args:
     executable: /bin/bash
+
+- name: create ops influxdb metering database and related user
+  shell: /opt/spacex/workspaces/autoDeployManifest/influxdb_create_metering_user/influxdb_create_metering.sh
+  args:
+    executable: /bin/bash
