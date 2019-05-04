@@ -46,6 +46,7 @@ echo net_id_mgmt: $net_id_mgmt >> $ANSIBLE_VARS
 echo net_id_public: $net_id_public >> $ANSIBLE_VARS
 
 # terraform variables
+> $TERRAFORM_VARS
 echo auth_url = \"$identity_endpoint\" >> $TERRAFORM_VARS
 echo domain_name = \"$openstack_domain_name\" >> $TERRAFORM_VARS
 echo user_name = \"$openstack_user_name\" >> $TERRAFORM_VARS
