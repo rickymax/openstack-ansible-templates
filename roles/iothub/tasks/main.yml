@@ -17,7 +17,32 @@
     bosh -e spacex -d apps-iothub-production -n deploy /opt/spacex/workspaces/rabbitmq-deployments/rabbitmq-deployment.yml \
       --vars-store /opt/spacex/workspaces/apps-iothub-production-vars.yml \
       -v environment=apps \
+      -v rabbitmq_server_private_ips=[10.10.16.100,10.10.32.100,10.10.48.100] \
+      -v rabbitmq_haproxy_private_ip=10.10.16.90 \
       -v rabbitmq_haproxy_public_ip=`bosh int /opt/spacex/tf/terraform-vars.yml --path /rabbitmq_haproxy_public_ip` \
+      -v domain={{cf_system_domain}}
+  args:
+    executable: /bin/bash
+
+- name: check ops-iothub-production-vars exists
+  stat:
+    path: /opt/spacex/workspaces/ops-iothub-production-vars.yml
+  register: stat_result
+
+- name: copy the vars, if ops-iothub-production-vars doesnt exist already
+  copy:
+    src: /opt/spacex/workspaces/cf-vars.yml
+    dest: /opt/spacex/workspaces/ops-iothub-production-vars.yml
+  when: stat_result.stat.exists == False
+
+- name: deploy ops-iothub-production
+  shell: |
+    bosh -e spacex -d ops-iothub-production -n deploy /opt/spacex/workspaces/rabbitmq-deployments/rabbitmq-deployment.yml \
+      --vars-store /opt/spacex/workspaces/ops-iothub-production-vars.yml \
+      -v environment=ops \
+      -v rabbitmq_server_private_ips=[10.10.16.200,10.10.32.200,10.10.48.200] \
+      -v rabbitmq_haproxy_private_ip=10.10.16.190 \
+      -o /opt/spacex/workspaces/rabbitmq-deployments/operations/remove-haproxy-public-network.yml \
       -v domain={{cf_system_domain}}
   args:
     executable: /bin/bash
