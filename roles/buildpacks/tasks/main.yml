@@ -1,0 +1,49 @@
+
+---
+
+- name: log into cf
+  shell: cl
+  args:
+    executable: /bin/bash
+
+- name: check buildpack is empty or not
+  command: cf buildpacks
+  register: cf_buildpacks
+
+- name: upload buildpacks
+  shell: '{{item}}'
+  when: "'No buildpacks found' in cf_buildpacks.stdout"
+  args:
+    executable: /bin/bash
+  with_items:
+    - cf create-buildpack --enable staticfile_buildpack /opt/spacex/buildpacks/staticfile_buildpack-cached-cflinuxfs2-v1.4.40.zip 1
+    - cf create-buildpack --enable java_buildpack /opt/spacex/buildpacks/java-buildpack-offline-v4.18.zip 2
+    - cf create-buildpack --enable ruby_buildpack /opt/spacex/buildpacks/ruby_buildpack-cached-cflinuxfs2-v1.7.36.zip 3
+    - cf create-buildpack --enable dotnet_core_buildpack /opt/spacex/buildpacks/dotnet-core_buildpack-cached-cflinuxfs2-v2.2.7.zip 4 
+    - cf create-buildpack --enable nodejs_buildpack /opt/spacex/buildpacks/nodejs_buildpack-cached-cflinuxfs2-v1.6.45.zip 5
+    - cf create-buildpack --enable go_buildpack /opt/spacex/buildpacks/go_buildpack-cached-cflinuxfs2-v1.8.35.zip 6
+    - cf create-buildpack --enable python_buildpack /opt/spacex/buildpacks/python_buildpack-cached-cflinuxfs2-v1.6.29.zip 7 
+    - cf create-buildpack --enable php_buildpack /opt/spacex/buildpacks/php_buildpack-cached-cflinuxfs2-v4.3.72.zip 8 
+    - cf create-buildpack --enable binary_buildpack /opt/spacex/buildpacks/binary_buildpack-cached-cflinuxfs2-v1.0.31.zip 9
+    - cf create-buildpack --enable nginx_buildpack /opt/spacex/buildpacks/nginx_buildpack-cached-cflinuxfs2-v1.0.9.zip 10
+    - cf create-buildpack --enable r_buildpack /opt/spacex/buildpacks/r_buildpack-cached-cflinuxfs2-v1.0.9.zip 11
+    - cf create-buildpack --enable Staticfile_v1-3-18 /opt/spacex/buildpacks/staticfile_buildpack-cached-v1.3.18.zip 12
+    - cf create-buildpack --enable Staticfile_v1-4-27 /opt/spacex/buildpacks/staticfile_buildpack-cached-v1.4.27.zip 13
+    - cf create-buildpack --enable apache_tomcat_buildpack /opt/spacex/buildpacks/java-buildpack-offline-v4.9.zip 14 
+    - cf create-buildpack --enable Java_v3-19-2 /opt/spacex/buildpacks/java-buildpack-offline-v3.19.2.zip 15
+    - cf create-buildpack --enable Java_v4-11 /opt/spacex/buildpacks/java-buildpack-offline-v4.11.zip 16
+    - cf create-buildpack --enable Java_v4-12 /opt/spacex/buildpacks/java-buildpack-offline-v4.12.zip 17
+    - cf create-buildpack --enable Ruby_v1-6-47 /opt/spacex/buildpacks/ruby_buildpack-cached-v1.6.47.zip 18
+    - cf create-buildpack --enable Ruby_v1-7-18 /opt/spacex/buildpacks/ruby_buildpack-cached-v1.7.18.zip 19
+    - cf create-buildpack --enable DotNetCore_v1-0-33 /opt/spacex/buildpacks/dotnet-core_buildpack-cached-v1.0.33.zip 20
+    - cf create-buildpack --enable DotNetCore_v2-0-6 /opt/spacex/buildpacks/dotnet-core_buildpack-cached-v2.0.6.zip 21
+    - cf create-buildpack --enable nodejs_buildpack_1607 /opt/spacex/buildpacks/nodejs_buildpack-cached-v1.6.7.zip 22
+    - cf create-buildpack --enable nodejs_buildpack_1620 /opt/spacex/buildpacks/nodejs_buildpack-cached-v1.6.20.zip 23
+    - cf create-buildpack --enable NodeJS_v1-6-24 /opt/spacex/buildpacks/nodejs_buildpack-cached-v1.6.24.zip 24
+    - cf create-buildpack --enable Go_v1-7-19 /opt/spacex/buildpacks/go_buildpack-cached-v1.7.19.zip 25
+    - cf create-buildpack --enable Go_v1-8-22 /opt/spacex/buildpacks/go_buildpack-cached-v1.8.22.zip 26
+    - cf create-buildpack --enable python_buildpack_offline /opt/spacex/buildpacks/python_buildpack-cached-v1.5.20.zip 27
+    - cf create-buildpack --enable Python_v1-5-26 /opt/spacex/buildpacks/python_buildpack-cached-v1.5.26.zip 28
+    - cf create-buildpack --enable Python_v1-6-15 /opt/spacex/buildpacks/python_buildpack-cached-v1.6.15.zip 29
+    - cf create-buildpack --enable PHP_v4-3-55 /opt/spacex/buildpacks/php_buildpack-cached-v4.3.55.zip 30
+    - cf create-buildpack --enable Binary_v1-8-22 /opt/spacex/buildpacks/binary_buildpack-cached-v1.0.18.zip 31
