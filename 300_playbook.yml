@@ -1,0 +1,6 @@
+---
+
+- name: install wise-stack
+  hosts: localhost
+  roles:
+    - nexus-oss

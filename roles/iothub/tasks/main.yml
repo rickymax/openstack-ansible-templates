@@ -43,6 +43,7 @@
       -v rabbitmq_server_private_ips=[10.10.16.200,10.10.32.200,10.10.48.200] \
       -v rabbitmq_haproxy_private_ip=10.10.16.190 \
       -o /opt/spacex/workspaces/rabbitmq-deployments/operations/remove-haproxy-public-network.yml \
+      -o /opt/spacex/workspaces/rabbitmq-deployments/operations/update-server-flavor.yml \
       -v domain={{cf_system_domain}}
   args:
     executable: /bin/bash
