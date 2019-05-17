@@ -8,6 +8,7 @@ openstack_password: P@ssw0rd
 openstack_tenant_name: WISE-PaaS
 openstack_region_name: RegionOne
 ext_net_name: public
+router_name: router04
 use_fuel_deploy: true
 
 dns: "[\"8.8.8.8\",\"8.8.4.4\"]"
