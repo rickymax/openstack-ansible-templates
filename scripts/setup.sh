@@ -1,5 +1,6 @@
 #!/bin/bash
 OPENSTACK_RC=/opt/spacex/scripts/openrc.sh
+OPENSTACK_RC_UPLOAD=/opt/spacex/scripts/openrc-tmp.sh
 OPENSTACK_CLI_VIRTUALENV=/home/ubuntu/.virtualenvs/os_cli/bin/activate
 ANSIBLE_VARS=/opt/spacex/playbooks/group_vars/all.yml
 TERRAFORM_VARS=/opt/spacex/init-openstack/terraform.tfvars
@@ -7,9 +8,12 @@ ANSIBLE_BOSH_WORKSPACE=/opt/spacex/tf/bosh-init
 ANSIBLE_CF_WORKSPACE=/opt/spacex/tf/cf-init
 
 # export openstack password
-sed -i "/read -sr OS_PASSWORD_INPUT/c OS_PASSWORD_INPUT=`bosh int $ANSIBLE_VARS --path /openstack_password`" $OPENSTACK_RC
-sed -i "/OS_PASSWORD_INPUT=/c OS_PASSWORD_INPUT=`bosh int $ANSIBLE_VARS --path /openstack_password`" $OPENSTACK_RC
-sed -i "/Please enter your OpenStack Password/d" $OPENSTACK_RC
+sed -i "/read -sr OS_PASSWORD_INPUT/c OS_PASSWORD_INPUT=`bosh int $ANSIBLE_VARS --path /openstack_password`" $OPENSTACK_RC_UPLOAD
+sed -i "/OS_PASSWORD_INPUT=/c OS_PASSWORD_INPUT=`bosh int $ANSIBLE_VARS --path /openstack_password`" $OPENSTACK_RC_UPLOAD
+sed -i "/OS_PASSWORD=/c export OS_PASSWORD=`bosh int $ANSIBLE_VARS --path /openstack_password`" $OPENSTACK_RC_UPLOAD
+sed -i "/Please enter your OpenStack Password/d" $OPENSTACK_RC_UPLOAD
+
+cat $OPENSTACK_RC_UPLOAD | grep export &> $OPENSTACK_RC
 
 source $OPENSTACK_RC
 source $OPENSTACK_CLI_VIRTUALENV
